@@ -38,10 +38,12 @@ class ArticleRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-    public function findOneById($category): array
+    public function findArticleById($category): array
     {
-        return $this->createQueryBuilder('c')
-             ->select('c.id, c.title, c.user')
+        return $this->createQueryBuilder('c') // CQB = faire une requête 'c' => rpz table actuelle "Article"
+             ->select('c.id, c.title, au.name, cat.title, c.releaseDate') 
+             ->join('c.author' , 'au') //'c' = la table "Article" + .author = le nom de la jointure/relation qu'on veut 'author' = clé étrangère , 'au' = une varible = Le nom qui rpz la table qu'on veut
+             ->join('c.category' , 'cat') 
              ->andWhere('c.category = :id')
              ->setParameter('id', $category)
              ->getQuery()
